@@ -59,6 +59,7 @@ public class CSVentry {
 			for(String item:temp1){
 				item = item.replaceAll("\\.", "");
 				item = item.trim();
+				item = "\"" + item + "\"";
 				if(!topicList.contains(item)){
 					topicList.add(item);
 				}
@@ -69,6 +70,7 @@ public class CSVentry {
 			for(String item: temp2){
 				item = item.replaceAll("\\.", "");
 				item = item.trim();
+				item = "\"" + item + "\"";
 				if(!topicList.contains(item)){
 					topicList.add(item);
 				}
@@ -101,6 +103,7 @@ public class CSVentry {
 				String[]temp = item.split(";");
 				for(String splitItem: temp){
 					splitItem = splitItem.trim();
+					splitItem = "\"" + splitItem + "\"";
 					if(!topicList.contains(splitItem)){
 						topicList.add(splitItem);
 					}
@@ -111,6 +114,7 @@ public class CSVentry {
 			String[]temp = topic.split(";");
 			for(String item:temp){
 				item = item.trim();
+				item = "\"" + item + "\"";
 				if(!topicList.contains(item)){
 					topicList.add(item);
 				}
@@ -136,7 +140,7 @@ public class CSVentry {
 		pubYear = pubYear.replaceAll("c", "");
 		//remove periods
 		pubYear = pubYear.replaceAll("\\.", "");
-		return pubYear;
+		return pubYear.substring(0, 4);//gets rid of any double dates
 	}
 	
 	private String cleanPublisher(String publisher, String publisherAlt)throws InvalidRecordException{
@@ -232,20 +236,26 @@ public class CSVentry {
 		}
 		//use the alt author param in first
 		else if(!first.equals("")){
-			//edited
-			int index = 0;
-			if(first.contains("edited")){
-				edited = "edited";
-				index = 2;
-			}
 			String[]temp = first.split(" ");
+			//edited
+			int index = 0;			
+			if(!Character.isUpperCase(temp[0].charAt(0))){
+				for(int i = 0; i < temp.length; i++){
+					if(Character.isUpperCase(temp[i].charAt(0))){
+						index = i;
+						edited = "edited";
+						break;
+					}
+				}
+			}
+			//String[]temp = first.split(" ");
 			firstName = temp[index];
 			if(temp[index+1].matches("[a-zA-Z].")){
 				middleName = temp[index+1];
-				lastName = temp[index+2];
+				lastName = temp[index+2].replaceAll(",", "");
 				}
 			else{
-				lastName = temp[index+1];
+				lastName = (temp[index+1].replaceAll(",", ""));
 			}
 		}
 		else{

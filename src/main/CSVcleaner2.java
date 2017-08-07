@@ -13,6 +13,7 @@ public class CSVcleaner2 {
 	String[]headers = null;
 	String[]entry = null;
 	ArrayList<CSVentry>all = new ArrayList<CSVentry>();
+	//ArrayList<CSVentry>trash = new ArrayList<CSVentry>();
 	int topicGreatest = 0;
 	int genSubjGreatest = 0;
 	int timeGreatest = 0;
@@ -21,9 +22,10 @@ public class CSVcleaner2 {
 	public static void main(String[]args){
 		CSVcleaner2 cleaner = new CSVcleaner2();
 		cleaner.parseFile();
-		cleaner.printFile(cleaner.all);
+		cleaner.printFile(cleaner.all, "CleanLibraryCSV.txt");
+		
 	}
-	public void parseFile(){		
+	private void parseFile(){		
 		
 		String line = "";
 		String splitBy = "\\|";
@@ -69,9 +71,9 @@ public class CSVcleaner2 {
 		}
 	}
 	
-	public void printFile(ArrayList<CSVentry>all){
+	private void printFile(ArrayList<CSVentry>all, String filename){
 		try{
-			BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\amy\\Documents\\Codergirl\\Neo4j\\MARC to CSV\\larger datasets\\CleanLibraryCSV.txt"));
+			BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\amy\\Documents\\Codergirl\\Neo4j\\MARC to CSV\\larger datasets\\" + filename));
 			String joinBy = ",";
 			String[]fields = {"020","245$a","260$a","260$b","260$c"};
 			Iterator<CSVentry> itr = all.iterator();
@@ -85,19 +87,19 @@ public class CSVcleaner2 {
 			writer.write("middle" + joinBy);
 			writer.write("edited" + joinBy);
 			for (int i = 1; i <= topicGreatest; i++){
-				String temp = "topic" + (char)(i + 48) + joinBy;
+				String temp = "topic" + Integer.toString(i) + joinBy;
 				writer.write(temp);
 			}
 			for (int i = 1; i <= genSubjGreatest; i++){
-				String temp = "genSubj" + (char)(i + 48) + joinBy;
+				String temp = "genSubj" + Integer.toString(i) + joinBy;
 				writer.write(temp);
 			}
 			for (int i = 1; i <= timeGreatest; i++){
-				String temp = "time" + (char)(i + 48) + joinBy;
+				String temp = "time" + Integer.toString(i) + joinBy;
 				writer.write(temp);
 			}
 			for (int i = 1; i <= placeGreatest; i++){
-				String temp = "place" + (char)(i + 48) + joinBy;
+				String temp = "place" + Integer.toString(i) + joinBy;
 				writer.write(temp);
 			}
 			writer.write('\n');
